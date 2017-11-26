@@ -3,7 +3,6 @@ package com.sangam.demo.entity;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @MappedSuperclass

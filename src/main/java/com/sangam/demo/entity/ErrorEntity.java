@@ -6,8 +6,6 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 public class ErrorEntity {
 
 	private HttpStatus status;
@@ -61,7 +59,14 @@ public class ErrorEntity {
 
 	public void setFieldErrors(List<FieldError> fieldErrors) {
 		this.fieldErrors = fieldErrors;
+	}
+
+	@Override
+	public String toString() {
+		return "ErrorEntity [status=" + status + ", timestamp=" + timestamp + ", message=" + message + ", debugMessage="
+				+ debugMessage + ", fieldErrors=" + fieldErrors + "]";
 	}	
+	
 	
 	
 

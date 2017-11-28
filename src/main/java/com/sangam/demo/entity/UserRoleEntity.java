@@ -25,7 +25,7 @@ public class UserRoleEntity  {
 	@NotNull
 	private  int type;
 	
-	private UserRoleEntity() {}
+	public UserRoleEntity() {}
 	
 
 	public UserRoleEntity(String name, int type) {

@@ -61,8 +61,4 @@ public class ServiceConfig extends WebMvcConfigurerAdapter {
 	    }
 	}
 	
-	@JsonIgnoreType
-	public class DemoJsonIgnoreType {}
-	
-	
 }

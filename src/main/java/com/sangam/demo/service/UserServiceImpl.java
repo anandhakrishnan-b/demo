@@ -33,10 +33,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Optional<UserEntity> findById(Long id) {
-		UserRoleEntity role = new UserRoleEntity("Admin", 1);
-		UserEntity entity = new UserEntity("user1","12132",role);
-		//return Optional.ofNullable(userRepository.findOne(id));
-		return Optional.ofNullable(entity);
+		return Optional.ofNullable(userRepository.findOne(id));
 	}
 
 	@Override
@@ -53,7 +50,6 @@ public class UserServiceImpl implements UserService {
 	
 	
 	@Override
-	@Transactional
 	public Optional<UserEntity> save(UserEntity user) {
 		logger.debug( "trasaction stats here");
 		userRoleRepository.save(user.getRole());

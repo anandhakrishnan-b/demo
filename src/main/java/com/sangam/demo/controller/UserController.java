@@ -2,6 +2,8 @@ package com.sangam.demo.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sangam.demo.entity.UserEntity;
 import com.sangam.demo.exception.EntityNotFoundException;
-import com.sangam.demo.service.UserService;
+import com.sangam.demo.facade.view.UserViewFacade;
+import com.sangam.demo.facade.wf.UserWfFacade;
 
 @RestController
 @RequestMapping("/users")
@@ -27,36 +30,39 @@ public class UserController {
 	 
  
 	@Autowired
-	private UserService userService;
+	private UserWfFacade userWfFacade;
+	
+	@Autowired
+	private UserViewFacade userViewFacade;
 	
 	@GetMapping("/")
 	public @ResponseBody List<UserEntity> findAll() {
-		return userService.findAll().orElseThrow(EntityNotFoundException::new);
+		return userViewFacade.findAll().orElseThrow(EntityNotFoundException::new);
 	}
 	
 	@GetMapping("/{id}")
 	public UserEntity findById(@PathVariable long id) {
 		logger.info("id={}",id);
-	    return userService.findById(id)
+	    return userViewFacade.findById(id)
 	            .orElseThrow(EntityNotFoundException::new);
 	}
 	
 	@GetMapping("/name/{name}")
 	public UserEntity findByName(@PathVariable String name) {
 		logger.info("name={0}",name);
-	    return userService.findByName(name)
+	    return userViewFacade.findByName(name)
 	            .orElseThrow(EntityNotFoundException::new);
 	}
 	
 	@PostMapping("/save")
 	@ResponseStatus(HttpStatus.CREATED)
-	public UserEntity save(@RequestBody UserEntity user) {
-	    return userService.save(user).orElseThrow(EntityNotFoundException::new);
+	public UserEntity save(@Valid @RequestBody UserEntity user) {
+	    return userWfFacade.save(user).orElseThrow(EntityNotFoundException::new);
 	}
 	
 	@PostMapping("/saveWithout")
 	@ResponseStatus(HttpStatus.CREATED)
 	public UserEntity saveWithout(@RequestBody UserEntity user) {
-	    return userService.saveWithout(user).orElseThrow(EntityNotFoundException::new);
+	    return userWfFacade.saveWithout(user).orElseThrow(EntityNotFoundException::new);
 	}
 }

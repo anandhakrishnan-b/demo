@@ -11,10 +11,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "User")
@@ -27,17 +24,14 @@ public class UserEntity extends AuditEntity {
 	private Long id;
 
 	@Column(name = "UserName")
-	@NotBlank(message = "User Name can't be empty!")
 	private String userName;
 	
-	@Column(name = "password")
-	@NotBlank(message = "Password can't be empty!")
+	@Column(name = "password")	
 	private String password;
 	
 //	TODO - Bi-Directional Changes
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@NotNull
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private UserRoleEntity role;
 	
 	public UserEntity() {}
@@ -53,16 +47,25 @@ public class UserEntity extends AuditEntity {
 		return id;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getUserName() {
 		return userName;
 	}
 
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
 	public String getPassword() {
 		return password;
 	}
 
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	public UserRoleEntity getRole() {
 		return role;

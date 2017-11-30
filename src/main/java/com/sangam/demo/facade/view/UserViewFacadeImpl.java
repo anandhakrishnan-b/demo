@@ -1,7 +1,6 @@
 package com.sangam.demo.facade.view;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sangam.demo.entity.UserEntity;
 import com.sangam.demo.service.UserService;
+import com.sangam.demo.vo.BaseResponseVO;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,20 +22,17 @@ public class UserViewFacadeImpl implements UserViewFacade {
 	UserService userService;
 
 	@Override
-	public Optional<List<UserEntity>> findAll() {
-		// TODO Auto-generated method stub
+	public BaseResponseVO<List<UserEntity>> findAll() {
 		return userService.findAll();
 	}
 
 	@Override
-	public Optional<UserEntity> findById(Long id) {
-		// TODO Auto-generated method stub
+	public BaseResponseVO<UserEntity> findById(Long id) {
 		return userService.findById(id);
 	}
 
 	@Override
-	public Optional<UserEntity> findByName(String name) {
-		// TODO Auto-generated method stub
+	public BaseResponseVO<UserEntity> findByName(String name) {
 		return userService.findByName(name);
 	}
 

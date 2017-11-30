@@ -23,18 +23,18 @@ public class AuditEntity extends BaseEntity {
 	@CreatedBy
 	private String createdBy;
 
-	@Column(name = "UPDATED_BY")
+	@Column(name = "LAST_MODIFIED_BY")
 	@LastModifiedBy
-	private String updatedBy;
+	private String lastModifiedBy;
 	
-	@Column(name = "DATE_CREATED")
+	@Column(name = "CREATED_DATE")
 	@CreatedDate
-	private LocalDateTime dateCreated;
+	private LocalDateTime createdDate;
 
-	@Column(name = "DATE_UPDATED")
+	@Column(name = "LAST_MODIFIED_DATE")
 	@LastModifiedDate
-	private LocalDateTime dateUpdated;
-	
+	private LocalDateTime lastModifiedDate;
+
 	public String getCreatedBy() {
 		return createdBy;
 	}
@@ -43,43 +43,28 @@ public class AuditEntity extends BaseEntity {
 		this.createdBy = createdBy;
 	}
 
-	public String getUpdatedBy() {
-		return updatedBy;
+	public String getLastModifiedBy() {
+		return lastModifiedBy;
 	}
 
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-	
-	public LocalDateTime getDateCreated() {
-		return dateCreated;
+	public void setLastModifiedBy(String lastModifiedBy) {
+		this.lastModifiedBy = lastModifiedBy;
 	}
 
-	public LocalDateTime getDateUpdated() {
-		return dateUpdated;
-	}
-	
-	public void setDateCreated(LocalDateTime dateCreated) {
-		this.dateCreated = dateCreated;
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
 	}
 
-	public void setDateUpdated(LocalDateTime dateUpdated) {
-		this.dateUpdated = dateUpdated;
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("AuditEntity [createdBy=");
-		builder.append(createdBy);
-		builder.append(", updatedBy=");
-		builder.append(updatedBy);
-		builder.append(", dateCreated=");
-		builder.append(dateCreated);
-		builder.append(", dateUpdated=");
-		builder.append(dateUpdated);
-		builder.append("]");
-		return builder.toString();
+	public LocalDateTime getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
 	}
 
 	@Override
@@ -87,9 +72,9 @@ public class AuditEntity extends BaseEntity {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
-		result = prime * result + ((dateCreated == null) ? 0 : dateCreated.hashCode());
-		result = prime * result + ((dateUpdated == null) ? 0 : dateUpdated.hashCode());
-		result = prime * result + ((updatedBy == null) ? 0 : updatedBy.hashCode());
+		result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
+		result = prime * result + ((lastModifiedBy == null) ? 0 : lastModifiedBy.hashCode());
+		result = prime * result + ((lastModifiedDate == null) ? 0 : lastModifiedDate.hashCode());
 		return result;
 	}
 
@@ -107,25 +92,38 @@ public class AuditEntity extends BaseEntity {
 				return false;
 		} else if (!createdBy.equals(other.createdBy))
 			return false;
-		if (dateCreated == null) {
-			if (other.dateCreated != null)
+		if (createdDate == null) {
+			if (other.createdDate != null)
 				return false;
-		} else if (!dateCreated.equals(other.dateCreated))
+		} else if (!createdDate.equals(other.createdDate))
 			return false;
-		if (dateUpdated == null) {
-			if (other.dateUpdated != null)
+		if (lastModifiedBy == null) {
+			if (other.lastModifiedBy != null)
 				return false;
-		} else if (!dateUpdated.equals(other.dateUpdated))
+		} else if (!lastModifiedBy.equals(other.lastModifiedBy))
 			return false;
-		if (updatedBy == null) {
-			if (other.updatedBy != null)
+		if (lastModifiedDate == null) {
+			if (other.lastModifiedDate != null)
 				return false;
-		} else if (!updatedBy.equals(other.updatedBy))
+		} else if (!lastModifiedDate.equals(other.lastModifiedDate))
 			return false;
 		return true;
 	}
-	
-	
-	
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("AuditEntity [createdBy=");
+		builder.append(createdBy);
+		builder.append(", lastModifiedBy=");
+		builder.append(lastModifiedBy);
+		builder.append(", createdDate=");
+		builder.append(createdDate);
+		builder.append(", lastModifiedDate=");
+		builder.append(lastModifiedDate);
+		builder.append("]");
+		return builder.toString();
+	}
+
+	
 }

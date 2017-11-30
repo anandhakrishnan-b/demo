@@ -1,22 +1,31 @@
 package com.sangam.demo.service;
 
+import static java.util.Collections.emptyList;
+
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
+import org.dozer.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sangam.demo.entity.UserEntity;
-import com.sangam.demo.entity.UserRoleEntity;
+import com.sangam.demo.exception.EntityNotFoundException;
 import com.sangam.demo.repository.UserRepository;
 import com.sangam.demo.repository.UserRoleRepository;
+import com.sangam.demo.vo.BaseRequestVO;
+import com.sangam.demo.vo.BaseResponseVO;
+import com.sangam.demo.vo.UserVO;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
 	public static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 	
@@ -26,36 +35,55 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRoleRepository userRoleRepository;
 	
-	@Override
-	public Optional<List<UserEntity>> findAll() {
-		return Optional.ofNullable(userRepository.findAll());
-	}
-
-	@Override
-	public Optional<UserEntity> findById(Long id) {
-		return Optional.ofNullable(userRepository.findOne(id));
-	}
-
-	@Override
-	public Optional<UserEntity> findByName(String name) {
-		return Optional.of(userRepository.findByName(name));
-	}
-
-	@Override
-	public Optional<UserEntity> saveWithout(UserEntity user) {
-		logger.debug( "NO>>trasaction stats here");
-		userRoleRepository.save(user.getRole());
-		return Optional.of(userRepository.save(user));
-	}
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
+	@Autowired
+	Mapper beanMapper;
 	
 	@Override
-	public Optional<UserEntity> save(UserEntity user) {
-		logger.debug( "trasaction stats here");
+	public BaseResponseVO<List<UserEntity>> findAll() {
+		
+		List<UserEntity> usersOpt = Optional.ofNullable(userRepository.findAll()).orElseThrow(EntityNotFoundException::new);
+		BaseResponseVO<List<UserEntity>> baseResponse = new BaseResponseVO<List<UserEntity>>(usersOpt);
+		return baseResponse;
+	}
+
+	@Override
+	public BaseResponseVO<UserEntity> findById(Long id) {
+		UserEntity userOpt = Optional.ofNullable(userRepository.findOne(id)).orElseThrow(EntityNotFoundException::new);
+		BaseResponseVO<UserEntity> baseResponse = new BaseResponseVO<UserEntity>(userOpt);
+		return baseResponse;
+	}
+
+	@Override
+	public BaseResponseVO<UserEntity> findByName(String name) {
+		UserEntity userOpt = Optional.ofNullable(userRepository.findByName(name)).orElseThrow(EntityNotFoundException::new);
+		BaseResponseVO<UserEntity> baseResponse = new BaseResponseVO<UserEntity>(userOpt);
+		return baseResponse;
+		
+	}
+
+	@Override
+	public BaseResponseVO<Long> save(BaseRequestVO<UserVO> userVORequest) {
+		logger.debug( ">>> UserVO  save {} "   , userVORequest.getInput());
+		UserEntity user = new UserEntity();
+		beanMapper.map(userVORequest.getInput(), user);
+//		TODO - UserEntity user = beanMapper.map(userVORequest.getInput(), UserEntity.class);
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		userRoleRepository.save(user.getRole());
 		UserEntity userSaved = userRepository.save(user);
-		logger.debug( "trasaction ends here");
-		return Optional.of(userSaved);
+		BaseResponseVO<Long> baseResponse = new BaseResponseVO<Long>(userSaved.getId());
+		return baseResponse;
 	}
+	
+	@Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserEntity userEntity = userRepository.findByName(username);
+        if (userEntity == null) {
+            throw new UsernameNotFoundException(username);
+        }
+        return new User(userEntity.getUserName(), userEntity.getPassword(), emptyList());
+    }
 
 }

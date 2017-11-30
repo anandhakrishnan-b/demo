@@ -1,12 +1,11 @@
 package com.sangam.demo.facade.wf;
 
-import java.util.Optional;
-
-import com.sangam.demo.entity.UserEntity;
+import com.sangam.demo.vo.BaseRequestVO;
+import com.sangam.demo.vo.BaseResponseVO;
+import com.sangam.demo.vo.UserVO;
 
 public interface UserWfFacade {
 	
-	public Optional<UserEntity> save(UserEntity user);
-	public Optional<UserEntity> saveWithout(UserEntity user);
+	public BaseResponseVO<Long> save(BaseRequestVO<UserVO> userVORequest);
 	
 }

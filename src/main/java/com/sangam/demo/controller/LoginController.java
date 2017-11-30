@@ -33,5 +33,6 @@ public class LoginController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public BaseResponseVO<Long> signUp(@RequestBody BaseRequestVO<UserVO> baseRequestVO) {
 	    return userWfFacade.save(baseRequestVO);
+//		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 	}
 }
